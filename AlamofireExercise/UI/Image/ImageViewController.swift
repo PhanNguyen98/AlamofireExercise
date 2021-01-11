@@ -17,7 +17,6 @@ class ImageViewController: UIViewController {
         super.viewDidLoad()
         loadImage()
         setUpNavigation()
-        self.navigationController?.navigationBar.barTintColor = UIColor.black
     }
     
     func loadImage() {
@@ -25,9 +24,9 @@ class ImageViewController: UIViewController {
     }
     
     func setUpNavigation() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up"), style: .plain, target: self, action: #selector(share(sender:)))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up"), style: .plain, target: self, action: #selector(share(sender:)))
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(popViewController) )
-        //self.navigationItem.
+        self.navigationController?.navigationBar.barTintColor = UIColor.black
     }
     
     @objc private func popViewController() {

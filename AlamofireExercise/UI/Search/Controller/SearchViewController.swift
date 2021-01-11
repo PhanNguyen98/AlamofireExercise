@@ -85,6 +85,14 @@ extension SearchViewController: UITableViewDelegate {
 //MARK: UITableViewDataSource
 extension SearchViewController: UITableViewDataSource {
     
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        if active == false {
+            return "Recent"
+        } else {
+            return "Result"
+        }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if active == false {
             return listKeySearch.count

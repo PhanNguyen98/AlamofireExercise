@@ -33,10 +33,12 @@ struct UrlsProfileImage:Codable {
 }
 
 struct TopicModel: Codable {
-    var owners: ImageModel
+    var title: String
+    var profile: ImageModel
     var list: [ImageModel]
     enum CodingKeys: String, CodingKey {
-        case owners = "cover_photo"
+        case title = "title"
+        case profile = "cover_photo"
         case list = "preview_photos"
     }
 }

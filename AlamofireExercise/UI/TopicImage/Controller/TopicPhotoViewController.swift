@@ -12,11 +12,13 @@ class TopicPhotoViewController: UIViewController {
 
     @IBOutlet weak var tableView: UITableView!
     
+    var nameTopic = ""
     var dataSources = [ImageModel]()
-    
+        
     override func viewDidLoad() {
         super.viewDidLoad()
         setTableView()
+        setNavigationBar()
     }
     
     func setTableView() {
@@ -24,6 +26,16 @@ class TopicPhotoViewController: UIViewController {
         tableView.dataSource = self
         tableView.rowHeight = 300
         tableView.register(UINib(nibName: "TopicPhotoTableViewCell", bundle: nil), forCellReuseIdentifier: "TopicPhotoTableViewCell")
+    }
+    
+    func setNavigationBar() {
+        self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"), style: .plain, target: self, action: #selector(popViewController))
+        self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up"), style: .plain, target: self, action: nil)
+        self.navigationItem.title = nameTopic
+    }
+    
+    @objc func popViewController() {
+        self.navigationController?.popViewController(animated: true)
     }
 
 }

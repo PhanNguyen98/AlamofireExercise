@@ -16,6 +16,7 @@ class PhotoManager {
     }
     
     func getListImage(completionHandler: @escaping (_ result: Result<[ImageModel]?, ResponseError>) -> ()) {
+        SVProgressHUD.show()
         APIManager.shared.call(type: ImageAPI.getRandomImage) { (result: Result<[ImageModel]?, ResponseError>) in
             switch result {
             case .success(let image):
@@ -24,9 +25,11 @@ class PhotoManager {
                 completionHandler(.failure(error))
             }
         }
+        SVProgressHUD.dismiss()
     }
     
     func getListTopic(completionHandler: @escaping (_ result: Result<[TopicModel]?, ResponseError>) -> ()) {
+        SVProgressHUD.show()
         APIManager.shared.call(type: ImageAPI.getListTopic) { (result: Result<[TopicModel]?, ResponseError>) in
             switch result {
             case .success(let list):
@@ -35,9 +38,11 @@ class PhotoManager {
                 completionHandler(.failure(error))
             }
         }
+        SVProgressHUD.dismiss()
     }
     
     func searchImage(name: String, completionHander: @escaping (_ result: Result<ListImage?, ResponseError>) -> () ) {
+        SVProgressHUD.show()
         APIManager.shared.call(type: ImageAPI.search(name)) { (result: Result<ListImage?, ResponseError>) in
             switch result {
             case .success(let result):
@@ -46,6 +51,7 @@ class PhotoManager {
                 completionHander(.failure(error))
             }
         }
+        SVProgressHUD.dismiss()
     }
     
     func loadImage(url: String, image: UIImageView) {

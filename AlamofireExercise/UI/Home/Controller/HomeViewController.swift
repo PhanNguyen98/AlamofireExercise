@@ -21,12 +21,17 @@ class HomeViewController: UIViewController {
         setTableView()
         setDataTableView()
         setDataListTopic()
-        
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.navigationController?.setNavigationBarHidden(true, animated: animated)
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
     func setTableView() {
@@ -69,7 +74,7 @@ class HomeViewController: UIViewController {
 extension HomeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        switch indexPath.row {
+        switch indexPath.section {
         case 0:
             guard let cell = cell as? HomeTableViewCell else { return }
             cell.setSearchBar(delegate: self)
@@ -82,7 +87,7 @@ extension HomeViewController: UITableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row > 1{
+        if indexPath.section == 2{
             let imageViewController = ImageViewController()
             imageViewController.urlStringImage = dataListPhotos[indexPath.row].urls.regular
             self.navigationController?.pushViewController(imageViewController, animated: true)
@@ -93,12 +98,32 @@ extension HomeViewController: UITableViewDelegate {
 
 extension HomeViewController: UITableViewDataSource {
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 3
+    }
+    
+    func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        switch section {
+        case 1:
+            return "Explore"
+        case 2:
+            return "New"
+        default:
+            return ""
+        }
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return dataListPhotos.count + 2
+        switch section {
+        case 0, 1:
+            return 1
+        default:
+            return dataListPhotos.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        switch indexPath.row{
+        switch indexPath.section{
         case 0:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "HomeTableViewCell", for: indexPath) as? HomeTableViewCell else {
                 return HomeTableViewCell()
@@ -116,7 +141,7 @@ extension HomeViewController: UITableViewDataSource {
                 return PhotoTableViewCell()
             }
             tableView.rowHeight = 400
-            PhotoManager.shared.loadImage(url: dataListPhotos[indexPath.row - 2].urls.regular, image: cell.contentImageView)
+            PhotoManager.shared.loadImage(url: dataListPhotos[indexPath.row].urls.regular, image: cell.contentImageView)
             return cell
         }
     }
@@ -140,6 +165,7 @@ extension HomeViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let topicPhotoViewController = TopicPhotoViewController()
         topicPhotoViewController.dataSources = self.dataListTopic[indexPath.row].list
+        topicPhotoViewController.nameTopic = self.dataListTopic[indexPath.row].title
         self.navigationController?.pushViewController(topicPhotoViewController, animated: true)
     }
     
@@ -155,7 +181,7 @@ extension HomeViewController: UICollectionViewDataSource {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TopicCollectionViewCell", for: indexPath) as? TopicCollectionViewCell else {
             return TopicCollectionViewCell()
         }
-        PhotoManager.shared.loadImage(url: dataListTopic[indexPath.row].owners.urls.regular, image: cell.topicImageView)
+        PhotoManager.shared.loadImage(url: dataListTopic[indexPath.row].profile.urls.regular, image: cell.topicImageView)
         return cell
     }
     

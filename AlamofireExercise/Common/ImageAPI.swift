@@ -61,7 +61,7 @@ extension ImageAPI: TargetType {
         switch self {
         case .getRandomImage:
             return [
-                "count" : 30,
+                "count" : 15,
                 "client_id" : "fwHA-NlbjOi6lyrG2-P7nA4tvo1_QBlC6-gccdv34ks"
             ]
         case .search(let name):
