@@ -8,5 +8,6 @@
 import Foundation
 
 class ResponseError: Codable, Error {
-    var error: String?
+    var key: String?
+    var message: String
 }

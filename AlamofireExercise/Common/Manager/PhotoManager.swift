@@ -7,7 +7,6 @@
 
 import Foundation
 import Alamofire
-import SVProgressHUD
 import Kingfisher
 
 class PhotoManager {
@@ -15,9 +14,9 @@ class PhotoManager {
     private init() {
     }
     
-    func getListImage(completionHandler: @escaping (_ result: Result<[ImageModel]?, ResponseError>) -> ()) {
-        SVProgressHUD.show()
-        APIManager.shared.call(type: ImageAPI.getRandomImage) { (result: Result<[ImageModel]?, ResponseError>) in
+    //Get random image with parameter count
+    func getListImage(count: Int, completionHandler: @escaping (_ result: Result<[ImageModel]?, ResponseError>) -> ()) {
+        APIManager.shared.call(type: ImageAPI.getRandomImage(count)) { (result: Result<[ImageModel]?, ResponseError>) in
             switch result {
             case .success(let image):
                 completionHandler(.success(image))
@@ -25,12 +24,11 @@ class PhotoManager {
                 completionHandler(.failure(error))
             }
         }
-        SVProgressHUD.dismiss()
     }
     
-    func getListTopic(completionHandler: @escaping (_ result: Result<[TopicModel]?, ResponseError>) -> ()) {
-        SVProgressHUD.show()
-        APIManager.shared.call(type: ImageAPI.getListTopic) { (result: Result<[TopicModel]?, ResponseError>) in
+    //Get list topic image in parameter page
+    func getListTopic(page: Int, completionHandler: @escaping (_ result: Result<[TopicModel]?, ResponseError>) -> ()) {
+        APIManager.shared.call(type: ImageAPI.getListTopic(page)) { (result: Result<[TopicModel]?, ResponseError>) in
             switch result {
             case .success(let list):
                 completionHandler(.success(list))
@@ -38,12 +36,11 @@ class PhotoManager {
                 completionHandler(.failure(error))
             }
         }
-        SVProgressHUD.dismiss()
     }
     
-    func searchImage(name: String, completionHander: @escaping (_ result: Result<ListImage?, ResponseError>) -> () ) {
-        SVProgressHUD.show()
-        APIManager.shared.call(type: ImageAPI.search(name)) { (result: Result<ListImage?, ResponseError>) in
+    //Search image with parameter name in parameter Page
+    func searchImage(name: String, page: Int, completionHander: @escaping (_ result: Result<ListImage?, ResponseError>) -> () ) {
+        APIManager.shared.call(type: ImageAPI.search(name, page)) { (result: Result<ListImage?, ResponseError>) in
             switch result {
             case .success(let result):
                 completionHander(.success(result))
@@ -51,7 +48,6 @@ class PhotoManager {
                 completionHander(.failure(error))
             }
         }
-        SVProgressHUD.dismiss()
     }
     
     func loadImage(url: String, image: UIImageView) {

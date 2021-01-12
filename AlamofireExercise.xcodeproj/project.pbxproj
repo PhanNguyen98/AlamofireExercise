@@ -23,6 +23,7 @@
 		D50A082925A4B697004233D6 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50A082825A4B697004233D6 /* APIManager.swift */; };
 		D50A082C25A4B7D1004233D6 /* ImageAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50A082B25A4B7D1004233D6 /* ImageAPI.swift */; };
 		D50A083025A4C089004233D6 /* ImageModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D50A082F25A4C089004233D6 /* ImageModel.swift */; };
+		D544835625AD876700FEF804 /* ClientID.swift in Sources */ = {isa = PBXBuildFile; fileRef = D544835525AD876700FEF804 /* ClientID.swift */; };
 		D58766FB25A2CED200D00C83 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D58766FA25A2CED200D00C83 /* AppDelegate.swift */; };
 		D58766FD25A2CED200D00C83 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D58766FC25A2CED200D00C83 /* SceneDelegate.swift */; };
 		D587670425A2CED500D00C83 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D587670325A2CED500D00C83 /* Assets.xcassets */; };
@@ -37,6 +38,8 @@
 		D5C7942325A5AF36005BB9F8 /* PhotoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5C7942125A5AF36005BB9F8 /* PhotoTableViewCell.xib */; };
 		D5C7942D25A5BFE4005BB9F8 /* HomeTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5C7942B25A5BFE4005BB9F8 /* HomeTableViewCell.swift */; };
 		D5C7942E25A5BFE4005BB9F8 /* HomeTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D5C7942C25A5BFE4005BB9F8 /* HomeTableViewCell.xib */; };
+		D5DCFEF425AC2EDA00C45600 /* TopicModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DCFEF325AC2EDA00C45600 /* TopicModel.swift */; };
+		D5DCFEF725AC4CA300C45600 /* SearchManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = D5DCFEF625AC4CA300C45600 /* SearchManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -58,6 +61,7 @@
 		D50A082825A4B697004233D6 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 		D50A082B25A4B7D1004233D6 /* ImageAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageAPI.swift; sourceTree = "<group>"; };
 		D50A082F25A4C089004233D6 /* ImageModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageModel.swift; sourceTree = "<group>"; };
+		D544835525AD876700FEF804 /* ClientID.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClientID.swift; sourceTree = "<group>"; };
 		D58766F725A2CED200D00C83 /* AlamofireExercise.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AlamofireExercise.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D58766FA25A2CED200D00C83 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D58766FC25A2CED200D00C83 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -74,6 +78,8 @@
 		D5C7942125A5AF36005BB9F8 /* PhotoTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = PhotoTableViewCell.xib; sourceTree = "<group>"; };
 		D5C7942B25A5BFE4005BB9F8 /* HomeTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeTableViewCell.swift; sourceTree = "<group>"; };
 		D5C7942C25A5BFE4005BB9F8 /* HomeTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = HomeTableViewCell.xib; sourceTree = "<group>"; };
+		D5DCFEF325AC2EDA00C45600 /* TopicModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopicModel.swift; sourceTree = "<group>"; };
+		D5DCFEF625AC4CA300C45600 /* SearchManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -189,10 +195,9 @@
 		D50A082125A4AF9C004233D6 /* Common */ = {
 			isa = PBXGroup;
 			children = (
-				D50A082225A4AFC1004233D6 /* PhotoManager.swift */,
-				D50A082525A4B603004233D6 /* ResponseError.swift */,
-				D50A082825A4B697004233D6 /* APIManager.swift */,
-				D50A082B25A4B7D1004233D6 /* ImageAPI.swift */,
+				D544835425AD868300FEF804 /* Constant */,
+				D544835325AD866700FEF804 /* Manager */,
+				D544835125AD863400FEF804 /* Service */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -201,8 +206,36 @@
 			isa = PBXGroup;
 			children = (
 				D50A082F25A4C089004233D6 /* ImageModel.swift */,
+				D5DCFEF325AC2EDA00C45600 /* TopicModel.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		D544835125AD863400FEF804 /* Service */ = {
+			isa = PBXGroup;
+			children = (
+				D50A082825A4B697004233D6 /* APIManager.swift */,
+				D50A082B25A4B7D1004233D6 /* ImageAPI.swift */,
+				D50A082525A4B603004233D6 /* ResponseError.swift */,
+			);
+			path = Service;
+			sourceTree = "<group>";
+		};
+		D544835325AD866700FEF804 /* Manager */ = {
+			isa = PBXGroup;
+			children = (
+				D50A082225A4AFC1004233D6 /* PhotoManager.swift */,
+				D5DCFEF625AC4CA300C45600 /* SearchManager.swift */,
+			);
+			path = Manager;
+			sourceTree = "<group>";
+		};
+		D544835425AD868300FEF804 /* Constant */ = {
+			isa = PBXGroup;
+			children = (
+				D544835525AD876700FEF804 /* ClientID.swift */,
+			);
+			path = Constant;
 			sourceTree = "<group>";
 		};
 		D58766EE25A2CED200D00C83 = {
@@ -448,10 +481,13 @@
 				D5079E4025A6E75D004BA7FD /* TopicCollectionViewCell.swift in Sources */,
 				D58766FD25A2CED200D00C83 /* SceneDelegate.swift in Sources */,
 				D5984EB225A304DB006A561A /* SearchTableViewCell.swift in Sources */,
+				D544835625AD876700FEF804 /* ClientID.swift in Sources */,
 				D5079E4B25A70BEA004BA7FD /* TopicPhotoViewController.swift in Sources */,
 				D587671625A2CFE700D00C83 /* HomeViewController.swift in Sources */,
 				D50A082C25A4B7D1004233D6 /* ImageAPI.swift in Sources */,
 				D50A082625A4B603004233D6 /* ResponseError.swift in Sources */,
+				D5DCFEF425AC2EDA00C45600 /* TopicModel.swift in Sources */,
+				D5DCFEF725AC4CA300C45600 /* SearchManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
