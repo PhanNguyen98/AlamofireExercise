@@ -6,21 +6,20 @@
 //
 
 import UIKit
-import Kingfisher
 import SVProgressHUD
 
 class HomeViewController: UIViewController {
     
+    //MARK: Properties
     @IBOutlet weak var tableView: UITableView!
     
     var dataListPhotos = [ImageModel]()
-    var dataListTopic = [TopicModel]()
    
+    //MARK: View cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setTableView()
         setDataTableView()
-        setDataListTopic()
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
     }
     
@@ -34,6 +33,7 @@ class HomeViewController: UIViewController {
         self.navigationController?.setNavigationBarHidden(false, animated: animated)
     }
     
+    //MARK: SetData
     func setTableView() {
         tableView.delegate = self
         tableView.dataSource = self
@@ -43,7 +43,9 @@ class HomeViewController: UIViewController {
     }
     
     func setDataTableView() {
-        PhotoManager.shared.getListImage() { result in
+        SVProgressHUD.show()
+        PhotoManager.shared.getListImage(count: 10) { result in
+            SVProgressHUD.dismiss()
             switch result {
             case .success(let listImage):
                 guard let list = listImage else { return }
@@ -51,26 +53,16 @@ class HomeViewController: UIViewController {
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
-            case .failure(let error):
-                print(error)
-            }
-        }
-    }
-    
-    func setDataListTopic() {
-        PhotoManager.shared.getListTopic() { result in
-            switch result {
-            case .success(let list):
-                guard let listTopic = list else { return }
-                self.dataListTopic = listTopic
-            case .failure(let error):
-                print(error)
+            case .failure(let response):
+                let alert = UIAlertController(title: "Load Image Error", message: response.message, preferredStyle: UIAlertController.Style.alert)
+                self.present(alert, animated: true, completion: nil)
             }
         }
     }
     
 }
 
+//MARK: UITableViewDelegate
 extension HomeViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
@@ -78,9 +70,6 @@ extension HomeViewController: UITableViewDelegate {
         case 0:
             guard let cell = cell as? HomeTableViewCell else { return }
             cell.setSearchBar(delegate: self)
-        case 1:
-            guard let cell = cell as? TopicTableViewCell else { return }
-            cell.setCollectionViewDelegateDataSource(dataSourceDelegate: self)
         default:
             break
         }
@@ -94,8 +83,20 @@ extension HomeViewController: UITableViewDelegate {
         }
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch indexPath.section {
+        case 0:
+            return 450
+        case 1:
+            return 200
+        default:
+            return 400
+        }
+    }
+    
 }
 
+//MARK: UITableViewDataSource
 extension HomeViewController: UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -128,19 +129,17 @@ extension HomeViewController: UITableViewDataSource {
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "HomeTableViewCell", for: indexPath) as? HomeTableViewCell else {
                 return HomeTableViewCell()
             }
-            tableView.rowHeight = 450
             return cell
         case 1:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "TopicTableViewCell", for: indexPath) as? TopicTableViewCell else {
                 return TopicTableViewCell()
             }
-            tableView.rowHeight = 200
+            cell.cellDelegate = self
             return cell
         default:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "PhotoTableViewCell", for: indexPath) as? PhotoTableViewCell else {
                 return PhotoTableViewCell()
             }
-            tableView.rowHeight = 400
             PhotoManager.shared.loadImage(url: dataListPhotos[indexPath.row].urls.regular, image: cell.contentImageView)
             return cell
         }
@@ -160,50 +159,17 @@ extension HomeViewController: UISearchBarDelegate {
     
 }
 
-extension HomeViewController: UICollectionViewDelegate {
+extension HomeViewController: TopicTableViewCellDelegate {
     
-    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func presentTopic(data: TopicModel, tableViewCell: UITableViewCell) {
         let topicPhotoViewController = TopicPhotoViewController()
-        topicPhotoViewController.dataSources = self.dataListTopic[indexPath.row].list
-        topicPhotoViewController.nameTopic = self.dataListTopic[indexPath.row].title
+        topicPhotoViewController.nameTopic = data.title
+        topicPhotoViewController.dataSources = data.list
         self.navigationController?.pushViewController(topicPhotoViewController, animated: true)
     }
     
-}
-
-extension HomeViewController: UICollectionViewDataSource {
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataListTopic.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TopicCollectionViewCell", for: indexPath) as? TopicCollectionViewCell else {
-            return TopicCollectionViewCell()
-        }
-        PhotoManager.shared.loadImage(url: dataListTopic[indexPath.row].profile.urls.regular, image: cell.topicImageView)
-        return cell
-    }
-    
-}
-
-extension HomeViewController: UICollectionViewDelegateFlowLayout {
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let width = UIScreen.main.bounds.width
-        return CGSize(width: width - 40, height: 160)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 10
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
-        return 10
+    func presentAlert(alert: UIAlertController) {
+        self.present(alert, animated: true, completion: nil)
     }
     
 }

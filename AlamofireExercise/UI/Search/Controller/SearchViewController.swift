@@ -7,6 +7,7 @@
 
 import UIKit
 import Alamofire
+import SVProgressHUD
 
 class SearchViewController: UIViewController {
 
@@ -15,20 +16,18 @@ class SearchViewController: UIViewController {
     
     let searchController = UISearchController(searchResultsController: nil)
     var listResult = [ImageModel]()
-    var listKeySearch = [String]()
-    var listResultForKey = [String]()
     var active = false
     
     //MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
-        settableView()
+        setTableView()
         setSearchController()
     }
     
-    //MARK: setUI
+    //MARK: setUIandData
     func setSearchController() {
-        searchController.searchResultsUpdater = self
+        //searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Search photos"
         navigationItem.searchController = searchController
@@ -38,27 +37,29 @@ class SearchViewController: UIViewController {
         searchController.searchBar.delegate = self
     }
     
-    func settableView() {
+    func setTableView() {
         tableView.dataSource = self
         tableView.delegate = self
         tableView.register(UINib(nibName: "SearchTableViewCell", bundle: nil), forCellReuseIdentifier: "SearchTableViewCell")
         tableView.register(UINib(nibName: "PhotoTableViewCell", bundle: nil), forCellReuseIdentifier: "PhotoTableViewCell")
     }
 
-    func searchImage(name: String) {
-        PhotoManager.shared.searchImage(name: name) { result in
+    func searchImage(name: String, page: Int) {
+        SVProgressHUD.show()
+        PhotoManager.shared.searchImage(name: name, page: page) { result in
+            SVProgressHUD.dismiss()
             switch result {
             case .success(let listImage):
                 if let list = listImage {
+                    SearchManager.shared.setData(keySearch: name, data: list)
                     self.listResult = list.results
-                    self.listKeySearch.append(name)
-                    self.listResultForKey.append(list.results[0].urls.regular)
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
                     }
                 }
-            case .failure(let error):
-                print(error)
+            case .failure(let response):
+                let alert = UIAlertController(title: "Search Image Error", message: response.message, preferredStyle: UIAlertController.Style.alert)
+                self.present(alert, animated: true, completion: nil)
             }
         }
     }
@@ -69,14 +70,24 @@ class SearchViewController: UIViewController {
 extension SearchViewController: UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if active == false {
-            let imageViewController = ImageViewController()
-            imageViewController.urlStringImage = listResultForKey[indexPath.row]
-            self.navigationController?.pushViewController(imageViewController, animated: true)
-        } else {
+        switch indexPath.section {
+        case 0:
+            let topicPhotoViewController = TopicPhotoViewController()
+            topicPhotoViewController.dataSources = SearchManager.shared.listResult[indexPath.row].results
+            self.navigationController?.pushViewController(topicPhotoViewController, animated: true)
+        default:
             let imageViewController = ImageViewController()
             imageViewController.urlStringImage = listResult[indexPath.row].urls.regular
             self.navigationController?.pushViewController(imageViewController, animated: true)
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        switch indexPath.section {
+        case 0:
+            return 30
+        default:
+            return 250
         }
     }
     
@@ -85,42 +96,39 @@ extension SearchViewController: UITableViewDelegate {
 //MARK: UITableViewDataSource
 extension SearchViewController: UITableViewDataSource {
     
+    func numberOfSections(in tableView: UITableView) -> Int {
+        return 2
+    }
+    
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        if active == false {
+        switch section {
+        case 0:
             return "Recent"
-        } else {
+        default:
             return "Result"
         }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if active == false {
-            return listKeySearch.count
-        } else {
+        switch section {
+        case 0:
+            return SearchManager.shared.listKeySearch.count
+        default:
             return listResult.count
         }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if active == false {
+        switch indexPath.section {
+        case 0:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SearchTableViewCell", for: indexPath) as? SearchTableViewCell else { return SearchTableViewCell() }
-            cell.keySearchLabel.text = listKeySearch[indexPath.row]
+            cell.keySearchLabel.text = SearchManager.shared.listKeySearch[indexPath.row]
             return cell
-        } else {
+        default:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "PhotoTableViewCell", for: indexPath) as? PhotoTableViewCell else { return PhotoTableViewCell() }
-            tableView.rowHeight = 250
             PhotoManager.shared.loadImage(url: listResult[indexPath.row].urls.regular, image: cell.contentImageView)
             return cell
         }
-    }
-    
-}
-
-//MARK: UISearchResultsUpdating
-extension SearchViewController: UISearchResultsUpdating {
-    
-    func updateSearchResults(for searchController: UISearchController) {
-        
     }
     
 }
@@ -130,17 +138,12 @@ extension SearchViewController: UISearchBarDelegate {
     
     func searchBarTextDidEndEditing(_ searchBar: UISearchBar) {
         if let keySearch = searchBar.text {
-            self.active = true
-            self.searchImage(name: keySearch)
+            self.searchImage(name: keySearch, page: 1)
         }
     }
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        self.active = false
-        self.tableView.rowHeight = 30
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
+        self.dismiss(animated: true, completion: nil)
     }
     
 }

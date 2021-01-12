@@ -9,9 +9,9 @@ import Foundation
 import Alamofire
 
 enum ImageAPI {
-    case getListTopic
-    case getRandomImage
-    case search(_: String)
+    case getListTopic(_: Int)
+    case getRandomImage(_: Int)
+    case search(_: String, _: Int)
 }
 
 extension ImageAPI: TargetType {
@@ -59,21 +59,21 @@ extension ImageAPI: TargetType {
     
     var params: Parameters {
         switch self {
-        case .getRandomImage:
+        case .getRandomImage(let count):
             return [
-                "count" : 15,
-                "client_id" : "fwHA-NlbjOi6lyrG2-P7nA4tvo1_QBlC6-gccdv34ks"
+                "count" : count,
+                "client_id" : SeverPath.keyAccess
             ]
-        case .search(let name):
+        case .search(let name, let page):
             return [
-                "page" : 1,
+                "page" : page,
                 "query" : name,
-                "client_id" : "fwHA-NlbjOi6lyrG2-P7nA4tvo1_QBlC6-gccdv34ks"
+                "client_id" : SeverPath.keyAccess
             ]
-        case .getListTopic:
+        case .getListTopic(let page):
             return [
-                "page" : 3,
-                "client_id" : "fwHA-NlbjOi6lyrG2-P7nA4tvo1_QBlC6-gccdv34ks"
+                "page" : page,
+                "client_id" : SeverPath.keyAccess
             ]
         }
     }
