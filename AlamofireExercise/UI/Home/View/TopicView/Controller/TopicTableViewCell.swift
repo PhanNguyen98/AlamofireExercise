@@ -9,77 +9,63 @@ import UIKit
 import SVProgressHUD
 
 protocol TopicTableViewCellDelegate: class {
-    func presentAlert(alert: UIAlertController)
-    func presentTopic(data: TopicModel, tableViewCell: UITableViewCell)
+    func collectionView(collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath, data: TopicModel, tableViewCell: UITableViewCell)
 }
 
 class TopicTableViewCell: UITableViewCell {
 
+    //MARK: Properties
     @IBOutlet weak var collectionView: UICollectionView!
     
     weak var cellDelegate: TopicTableViewCellDelegate?
-    var dataListTopic = [TopicModel]()
+    var dataSources = [TopicModel]()
     
     override func awakeFromNib() {
         super.awakeFromNib()
         setCollectionView()
-        setDataListTopic()
     }
 
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
     
+    //MARK: Setup CollectionView
     func setCollectionView() {
         collectionView.delegate = self
         collectionView.dataSource = self
         collectionView.register(UINib(nibName: "TopicCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "TopicCollectionViewCell")
     }
     
-    func setDataListTopic() {
-        SVProgressHUD.show()
-        PhotoManager.shared.getListTopic(page: 1) { result in
-            SVProgressHUD.dismiss()
-            switch result {
-            case .success(let list):
-                guard let listTopic = list else { return }
-                self.dataListTopic = listTopic
-                DispatchQueue.main.async {
-                    self.collectionView.reloadData()
-                }
-            case .failure(let response):
-                let alert = UIAlertController(title: "Load Topic Error", message: response.message, preferredStyle: UIAlertController.Style.alert)
-                self.cellDelegate?.presentAlert(alert: alert)
-            }
-        }
-    }
-    
 }
 
+//MARK: UICollectionViewDelegate
 extension TopicTableViewCell: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.cellDelegate?.presentTopic(data: dataListTopic[indexPath.row], tableViewCell: self)
+        self.cellDelegate?.collectionView(collectionView: collectionView, didSelectItemAt: indexPath, data: dataSources[indexPath.row], tableViewCell: self)
     }
     
 }
 
+//MARK: UICollectionViewDataSource
 extension TopicTableViewCell: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return dataListTopic.count
+        return dataSources.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TopicCollectionViewCell", for: indexPath) as? TopicCollectionViewCell else {
             return TopicCollectionViewCell()
         }
-        PhotoManager.shared.loadImage(url: dataListTopic[indexPath.row].profile.urls.regular, image: cell.topicImageView)
+        cell.nameTopicLabel.text = dataSources[indexPath.row].title
+        PhotoManager.shared.loadImage(url: dataSources[indexPath.row].profile.urls.regular, image: cell.topicImageView)
         return cell
     }
     
 }
 
+//MARK: UICollectionViewDelegateFlowLayout
 extension TopicTableViewCell: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

@@ -10,6 +10,7 @@ import UIKit
 class TopicPhotoTableViewCell: UITableViewCell {
 
     @IBOutlet weak var topicImageView: UIImageView!
+    @IBOutlet weak var nameAuthLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

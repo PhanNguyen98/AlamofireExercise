@@ -10,6 +10,7 @@ import UIKit
 class TopicCollectionViewCell: UICollectionViewCell {
 
     @IBOutlet weak var topicImageView: UIImageView!
+    @IBOutlet weak var nameTopicLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()

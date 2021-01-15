@@ -12,6 +12,7 @@ enum ImageAPI {
     case getListTopic(_: Int)
     case getRandomImage(_: Int)
     case search(_: String, _: Int)
+    case getListPhoto(_: Int, _: Int)
 }
 
 extension ImageAPI: TargetType {
@@ -28,6 +29,8 @@ extension ImageAPI: TargetType {
             return "/topics"
         case .search:
             return "/search/photos"
+        case .getListPhoto:
+            return "/photos"
         }
     }
     
@@ -35,6 +38,7 @@ extension ImageAPI: TargetType {
         switch self {
         case .getListTopic,
              .getRandomImage,
+             .getListPhoto,
              .search:
             return .get
         }
@@ -52,6 +56,7 @@ extension ImageAPI: TargetType {
         switch self {
         case .getListTopic,
              .getRandomImage,
+             .getListPhoto,
              .search:
             return URLEncoding.default
         }
@@ -62,18 +67,24 @@ extension ImageAPI: TargetType {
         case .getRandomImage(let count):
             return [
                 "count" : count,
-                "client_id" : SeverPath.keyAccess
+                "client_id" : SeverPath.upsplashAccessKey
             ]
         case .search(let name, let page):
             return [
                 "page" : page,
                 "query" : name,
-                "client_id" : SeverPath.keyAccess
+                "client_id" : SeverPath.upsplashAccessKey
             ]
         case .getListTopic(let page):
             return [
                 "page" : page,
-                "client_id" : SeverPath.keyAccess
+                "client_id" : SeverPath.upsplashAccessKey
+            ]
+        case .getListPhoto(let page, let count):
+            return [
+                "page" : page,
+                "per_page" : count,
+                "client_id" : SeverPath.upsplashAccessKey
             ]
         }
     }

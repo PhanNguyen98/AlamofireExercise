@@ -9,14 +9,29 @@ import UIKit
 
 class ImageViewController: UIViewController {
 
+    //MARK: Properties
     @IBOutlet weak var contentImageView: UIImageView!
     
     var urlStringImage = ""
+    var nameAuth = ""
     
+    //MARK: View Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         loadImage()
         setUpNavigation()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.navigationController?.navigationBar.tintColor = .white
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.white]
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.navigationController?.navigationBar.tintColor = .black
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
     }
     
     func loadImage() {
@@ -27,6 +42,7 @@ class ImageViewController: UIViewController {
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up"), style: .plain, target: self, action: #selector(share(sender:)))
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "xmark"), style: .plain, target: self, action: #selector(popViewController) )
         self.navigationController?.navigationBar.barTintColor = UIColor.black
+        self.title = nameAuth
     }
     
     @objc private func popViewController() {

@@ -19,18 +19,18 @@
             <rect key="frame" x="0.0" y="0.0" width="414" height="896"/>
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
-                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="NEl-k5-CjD">
-                    <rect key="frame" x="0.0" y="44" width="414" height="818"/>
+                <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" style="grouped" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="18" sectionFooterHeight="18" contentViewInsetsToSafeArea="NO" translatesAutoresizingMaskIntoConstraints="NO" id="NEl-k5-CjD">
+                    <rect key="frame" x="0.0" y="0.0" width="414" height="862"/>
                     <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                 </tableView>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" systemColor="systemBackgroundColor"/>
             <constraints>
-                <constraint firstItem="NEl-k5-CjD" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="FQ3-u0-Kkv"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="NEl-k5-CjD" secondAttribute="bottom" id="aaY-bY-K1O"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="NEl-k5-CjD" secondAttribute="trailing" id="r20-mb-UtL"/>
-                <constraint firstItem="NEl-k5-CjD" firstAttribute="top" secondItem="fnl-2z-Ty3" secondAttribute="top" id="sPR-F9-8g1"/>
+                <constraint firstItem="NEl-k5-CjD" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="D5B-0m-YNh"/>
+                <constraint firstItem="NEl-k5-CjD" firstAttribute="bottom" secondItem="fnl-2z-Ty3" secondAttribute="bottom" id="HsM-SY-kzw"/>
+                <constraint firstItem="NEl-k5-CjD" firstAttribute="trailing" secondItem="fnl-2z-Ty3" secondAttribute="trailing" id="YQu-5Q-Umc"/>
+                <constraint firstItem="NEl-k5-CjD" firstAttribute="leading" secondItem="fnl-2z-Ty3" secondAttribute="leading" id="Z3t-gv-KMO"/>
             </constraints>
             <point key="canvasLocation" x="-159.42028985507247" y="129.91071428571428"/>
         </view>

@@ -14,12 +14,14 @@ class HomeViewController: UIViewController {
     @IBOutlet weak var tableView: UITableView!
     
     var dataListPhotos = [ImageModel]()
+    var dataListTopic = [TopicModel]()
+    var index = 1
    
     //MARK: View cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         setTableView()
-        setDataTableView()
+        loadData()
         self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor : UIColor.black]
     }
     
@@ -40,21 +42,59 @@ class HomeViewController: UIViewController {
         tableView.register(UINib(nibName: "PhotoTableViewCell", bundle: nil), forCellReuseIdentifier: "PhotoTableViewCell")
         tableView.register(UINib(nibName: "HomeTableViewCell", bundle: nil), forCellReuseIdentifier: "HomeTableViewCell")
         tableView.register(UINib(nibName: "TopicTableViewCell", bundle: nil), forCellReuseIdentifier: "TopicTableViewCell")
+        tableView.sectionIndexBackgroundColor = UIColor.white
+        tableView.contentInsetAdjustmentBehavior = .never
     }
     
-    func setDataTableView() {
+    func loadData() {
+        let queue = DispatchQueue.global(qos: .userInteractive)
         SVProgressHUD.show()
-        PhotoManager.shared.getListImage(count: 10) { result in
-            SVProgressHUD.dismiss()
+        queue.async {
+            let dispatchGroup = DispatchGroup()
+            dispatchGroup.enter()
+            self.setDataListTopic()
+            dispatchGroup.leave()
+            dispatchGroup.enter()
+            self.setDataListPhoto(page: 1, count: 10)
+            dispatchGroup.leave()
+            dispatchGroup.notify(queue: .main) {
+                SVProgressHUD.dismiss()
+            }
+        }
+    }
+    
+    func setDataListPhoto(page: Int, count: Int) {
+        PhotoManager.shared.getListPhotos(page: page, count: count) { result in
             switch result {
-            case .success(let listImage):
-                guard let list = listImage else { return }
-                self.dataListPhotos = list
+            case .success(let list):
+                guard let listPhoto = list else { return }
+                self.dataListPhotos.append(contentsOf: listPhoto)
                 DispatchQueue.main.async {
                     self.tableView.reloadData()
                 }
             case .failure(let response):
-                let alert = UIAlertController(title: "Load Image Error", message: response.message, preferredStyle: UIAlertController.Style.alert)
+                var message = ""
+                for item in response.errors {
+                    message += item
+                }
+                let alert = UIAlertController(title: "Load Image Error", message: message, preferredStyle: UIAlertController.Style.alert)
+                self.present(alert, animated: true, completion: nil)
+            }
+        }
+    }
+    
+    func setDataListTopic() {
+        PhotoManager.shared.getListTopic(page: 1) { result in
+            switch result {
+            case .success(let list):
+                guard let listTopic = list else { return }
+                self.dataListTopic = listTopic
+            case .failure(let response):
+                var message = ""
+                for item in response.errors {
+                    message += item
+                }
+                let alert = UIAlertController(title: "Load Topic Error", message: message, preferredStyle: UIAlertController.Style.alert)
                 self.present(alert, animated: true, completion: nil)
             }
         }
@@ -70,6 +110,12 @@ extension HomeViewController: UITableViewDelegate {
         case 0:
             guard let cell = cell as? HomeTableViewCell else { return }
             cell.setSearchBar(delegate: self)
+        case 2:
+            let lastRow = dataListPhotos.count - 1
+            if indexPath.row == lastRow {
+                index += 1
+                setDataListPhoto(page: index, count: 10)
+            }
         default:
             break
         }
@@ -79,6 +125,7 @@ extension HomeViewController: UITableViewDelegate {
         if indexPath.section == 2{
             let imageViewController = ImageViewController()
             imageViewController.urlStringImage = dataListPhotos[indexPath.row].urls.regular
+            imageViewController.nameAuth = dataListPhotos[indexPath.row].user.name
             self.navigationController?.pushViewController(imageViewController, animated: true)
         }
     }
@@ -123,6 +170,14 @@ extension HomeViewController: UITableViewDataSource {
         }
     }
     
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        if section == 0 {
+            return .leastNormalMagnitude
+        } else {
+            return 30
+        }
+    }
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section{
         case 0:
@@ -135,6 +190,8 @@ extension HomeViewController: UITableViewDataSource {
                 return TopicTableViewCell()
             }
             cell.cellDelegate = self
+            cell.dataSources = dataListTopic
+            cell.collectionView.reloadData()
             return cell
         default:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "PhotoTableViewCell", for: indexPath) as? PhotoTableViewCell else {
@@ -147,6 +204,7 @@ extension HomeViewController: UITableViewDataSource {
 
 }
 
+//MARK: UISearchBarDelegate
 extension HomeViewController: UISearchBarDelegate {
     
     func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
@@ -159,17 +217,15 @@ extension HomeViewController: UISearchBarDelegate {
     
 }
 
+//MARK: TopicTableViewCellDelegate
 extension HomeViewController: TopicTableViewCellDelegate {
     
-    func presentTopic(data: TopicModel, tableViewCell: UITableViewCell) {
+    func collectionView(collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath, data: TopicModel, tableViewCell: UITableViewCell) {
         let topicPhotoViewController = TopicPhotoViewController()
         topicPhotoViewController.nameTopic = data.title
         topicPhotoViewController.dataSources = data.list
+        topicPhotoViewController.nameAuth = data.profile.user.name
         self.navigationController?.pushViewController(topicPhotoViewController, animated: true)
-    }
-    
-    func presentAlert(alert: UIAlertController) {
-        self.present(alert, animated: true, completion: nil)
     }
     
 }

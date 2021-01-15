@@ -10,11 +10,14 @@ import Kingfisher
 
 class TopicPhotoViewController: UIViewController {
 
+    //MARK: Properties
     @IBOutlet weak var tableView: UITableView!
     
     var nameTopic = ""
-    var dataSources = [ImageModel]()
+    var dataSources = [UrlModel]()
+    var nameAuth = ""
         
+    //MARK: ViewDidLoad
     override func viewDidLoad() {
         super.viewDidLoad()
         setTableView()
@@ -32,6 +35,8 @@ class TopicPhotoViewController: UIViewController {
         self.navigationItem.leftBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "chevron.backward"), style: .plain, target: self, action: #selector(popViewController))
         self.navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "square.and.arrow.up"), style: .plain, target: self, action: nil)
         self.navigationItem.title = nameTopic
+        self.navigationController?.navigationBar.titleTextAttributes = [NSAttributedString.Key.foregroundColor: UIColor.black]
+        self.navigationController?.navigationBar.tintColor = .black
     }
     
     @objc func popViewController() {
@@ -40,14 +45,17 @@ class TopicPhotoViewController: UIViewController {
 
 }
 
+//MARK: UITableViewDelegate
 extension TopicPhotoViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let imageViewController = ImageViewController()
         imageViewController.urlStringImage = dataSources[indexPath.row].urls.regular
+        imageViewController.nameAuth = nameAuth
         self.navigationController?.pushViewController(imageViewController, animated: true)
     }
 }
 
+//MARK: UITableViewDataSource
 extension TopicPhotoViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return dataSources.count
@@ -57,6 +65,7 @@ extension TopicPhotoViewController: UITableViewDataSource {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "TopicPhotoTableViewCell", for: indexPath) as? TopicPhotoTableViewCell else { return TopicPhotoTableViewCell()
         }
         PhotoManager.shared.loadImage(url: dataSources[indexPath.row].urls.regular, image: cell.topicImageView)
+        cell.nameAuthLabel.text = nameAuth
         return cell
     }
     
