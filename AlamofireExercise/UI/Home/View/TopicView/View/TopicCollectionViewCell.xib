@@ -19,6 +19,12 @@
                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="VRM-4J-pLJ">
                         <rect key="frame" x="0.0" y="0.0" width="268" height="110"/>
                     </imageView>
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="justified" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Cbt-7f-HAz">
+                        <rect key="frame" x="112" y="44.5" width="44.5" height="21"/>
+                        <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                        <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                 </subviews>
             </view>
             <viewLayoutGuide key="safeArea" id="ZTg-uK-7eu"/>
@@ -26,10 +32,13 @@
                 <constraint firstAttribute="trailing" secondItem="VRM-4J-pLJ" secondAttribute="trailing" id="2Ln-en-PQq"/>
                 <constraint firstItem="VRM-4J-pLJ" firstAttribute="top" secondItem="gTV-IL-0wX" secondAttribute="top" id="BsS-dZ-c4d"/>
                 <constraint firstItem="VRM-4J-pLJ" firstAttribute="leading" secondItem="gTV-IL-0wX" secondAttribute="leading" id="Nax-4B-l95"/>
+                <constraint firstItem="Cbt-7f-HAz" firstAttribute="centerX" secondItem="gTV-IL-0wX" secondAttribute="centerX" id="U8I-Jh-jvr"/>
                 <constraint firstAttribute="bottom" secondItem="VRM-4J-pLJ" secondAttribute="bottom" id="dv7-A4-QdG"/>
+                <constraint firstItem="Cbt-7f-HAz" firstAttribute="centerY" secondItem="gTV-IL-0wX" secondAttribute="centerY" id="rkL-Tn-Sgl"/>
             </constraints>
             <size key="customSize" width="268" height="110"/>
             <connections>
+                <outlet property="nameTopicLabel" destination="Cbt-7f-HAz" id="UeQ-CR-cEM"/>
                 <outlet property="topicImageView" destination="VRM-4J-pLJ" id="KSg-3f-RIk"/>
             </connections>
             <point key="canvasLocation" x="-84.057971014492765" y="99.776785714285708"/>

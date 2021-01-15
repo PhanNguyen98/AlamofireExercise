@@ -8,5 +8,5 @@
 import Foundation
 
 struct SeverPath {
-    static let keyAccess = "fwHA-NlbjOi6lyrG2-P7nA4tvo1_QBlC6-gccdv34ks"
+    static let upsplashAccessKey = "fwHA-NlbjOi6lyrG2-P7nA4tvo1_QBlC6-gccdv34ks"
 }

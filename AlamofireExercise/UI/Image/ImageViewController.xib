@@ -19,18 +19,54 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="p9f-1Z-zjq">
-                    <rect key="frame" x="0.0" y="150" width="414" height="562"/>
+                    <rect key="frame" x="0.0" y="150" width="414" height="612"/>
                 </imageView>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Jgj-hV-wcg">
+                    <rect key="frame" x="344" y="782" width="50" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="ZfE-8x-sML"/>
+                        <constraint firstAttribute="width" constant="50" id="dfT-Is-OG1"/>
+                    </constraints>
+                    <state key="normal" title="Button" image="down-arrow"/>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="89D-Xd-gHN">
+                    <rect key="frame" x="344" y="652" width="50" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="l5V-Vb-0C6"/>
+                        <constraint firstAttribute="width" constant="50" id="tqj-mI-dBo"/>
+                    </constraints>
+                    <fontDescription key="fontDescription" type="system" pointSize="18"/>
+                    <state key="normal" image="like"/>
+                </button>
+                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z6P-1K-pXm">
+                    <rect key="frame" x="344" y="717" width="50" height="50"/>
+                    <constraints>
+                        <constraint firstAttribute="height" constant="50" id="6Kf-19-3Mw"/>
+                        <constraint firstAttribute="width" constant="50" id="UoL-aa-klX"/>
+                    </constraints>
+                    <state key="normal" title="Button" image="plus"/>
+                </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="fnl-2z-Ty3"/>
             <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
             <constraints>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="89D-Xd-gHN" secondAttribute="trailing" constant="20" id="6MM-Ro-v6y"/>
                 <constraint firstItem="p9f-1Z-zjq" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="GAc-Co-Lmr"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="Jgj-hV-wcg" secondAttribute="bottom" constant="30" id="Kf3-8n-pOB"/>
                 <constraint firstItem="p9f-1Z-zjq" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" constant="150" id="S1A-su-7Pf"/>
-                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="p9f-1Z-zjq" secondAttribute="bottom" constant="150" id="gWD-23-2jQ"/>
+                <constraint firstItem="z6P-1K-pXm" firstAttribute="top" secondItem="89D-Xd-gHN" secondAttribute="bottom" constant="15" id="Vwy-wp-1TZ"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="Jgj-hV-wcg" secondAttribute="trailing" constant="20" id="aB2-0g-epU"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="z6P-1K-pXm" secondAttribute="trailing" constant="20" id="cO1-4h-XfJ"/>
+                <constraint firstItem="fnl-2z-Ty3" firstAttribute="bottom" secondItem="p9f-1Z-zjq" secondAttribute="bottom" constant="100" id="gWD-23-2jQ"/>
                 <constraint firstItem="fnl-2z-Ty3" firstAttribute="trailing" secondItem="p9f-1Z-zjq" secondAttribute="trailing" id="kpi-1R-1yt"/>
+                <constraint firstItem="Jgj-hV-wcg" firstAttribute="top" secondItem="z6P-1K-pXm" secondAttribute="bottom" constant="15" id="upt-VY-dJW"/>
             </constraints>
-            <point key="canvasLocation" x="-242" y="77"/>
+            <point key="canvasLocation" x="-242.0289855072464" y="76.339285714285708"/>
         </view>
     </objects>
+    <resources>
+        <image name="down-arrow" width="64" height="64"/>
+        <image name="like" width="64" height="64"/>
+        <image name="plus" width="64" height="64"/>
+    </resources>
 </document>

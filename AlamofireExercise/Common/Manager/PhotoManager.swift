@@ -15,7 +15,7 @@ class PhotoManager {
     }
     
     //Get random image with parameter count
-    func getListImage(count: Int, completionHandler: @escaping (_ result: Result<[ImageModel]?, ResponseError>) -> ()) {
+    func getListRandomImage(count: Int, completionHandler: @escaping (_ result: Result<[ImageModel]?, ResponseError>) -> ()) {
         APIManager.shared.call(type: ImageAPI.getRandomImage(count)) { (result: Result<[ImageModel]?, ResponseError>) in
             switch result {
             case .success(let image):
@@ -29,6 +29,18 @@ class PhotoManager {
     //Get list topic image in parameter page
     func getListTopic(page: Int, completionHandler: @escaping (_ result: Result<[TopicModel]?, ResponseError>) -> ()) {
         APIManager.shared.call(type: ImageAPI.getListTopic(page)) { (result: Result<[TopicModel]?, ResponseError>) in
+            switch result {
+            case .success(let list):
+                completionHandler(.success(list))
+            case .failure(let error):
+                completionHandler(.failure(error))
+            }
+        }
+    }
+    
+    //Get list photos with parameter page
+    func getListPhotos(page: Int, count: Int, completionHandler: @escaping (_ result: Result<[ImageModel]?, ResponseError>) -> ()) {
+        APIManager.shared.call(type: ImageAPI.getListPhoto(page, count)) { (result: Result<[ImageModel]?, ResponseError>) in
             switch result {
             case .success(let list):
                 completionHandler(.success(list))

@@ -16,7 +16,6 @@ class SearchViewController: UIViewController {
     
     let searchController = UISearchController(searchResultsController: nil)
     var listResult = [ImageModel]()
-    var active = false
     
     //MARK: ViewDidLoad
     override func viewDidLoad() {
@@ -25,7 +24,7 @@ class SearchViewController: UIViewController {
         setSearchController()
     }
     
-    //MARK: setUIandData
+    //MARK: setUI and Data
     func setSearchController() {
         //searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
@@ -42,6 +41,7 @@ class SearchViewController: UIViewController {
         tableView.delegate = self
         tableView.register(UINib(nibName: "SearchTableViewCell", bundle: nil), forCellReuseIdentifier: "SearchTableViewCell")
         tableView.register(UINib(nibName: "PhotoTableViewCell", bundle: nil), forCellReuseIdentifier: "PhotoTableViewCell")
+        
     }
 
     func searchImage(name: String, page: Int) {
@@ -51,14 +51,18 @@ class SearchViewController: UIViewController {
             switch result {
             case .success(let listImage):
                 if let list = listImage {
-                    SearchManager.shared.setData(keySearch: name, data: list)
+                    UserDefaultManager.shared.setData(text: name)
                     self.listResult = list.results
                     DispatchQueue.main.async {
                         self.tableView.reloadData()
                     }
                 }
             case .failure(let response):
-                let alert = UIAlertController(title: "Search Image Error", message: response.message, preferredStyle: UIAlertController.Style.alert)
+                var message = ""
+                for item in response.errors {
+                    message += item
+                }
+                let alert = UIAlertController(title: "Search Image Error", message: message, preferredStyle: UIAlertController.Style.alert)
                 self.present(alert, animated: true, completion: nil)
             }
         }
@@ -72,12 +76,11 @@ extension SearchViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 0:
-            let topicPhotoViewController = TopicPhotoViewController()
-            topicPhotoViewController.dataSources = SearchManager.shared.listResult[indexPath.row].results
-            self.navigationController?.pushViewController(topicPhotoViewController, animated: true)
+            self.searchController.searchBar.text = UserDefaultManager.shared.getData()[indexPath.row]
         default:
             let imageViewController = ImageViewController()
             imageViewController.urlStringImage = listResult[indexPath.row].urls.regular
+            imageViewController.nameAuth = listResult[indexPath.row].user.name
             self.navigationController?.pushViewController(imageViewController, animated: true)
         }
     }
@@ -112,7 +115,7 @@ extension SearchViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0:
-            return SearchManager.shared.listKeySearch.count
+            return UserDefaultManager.shared.getData().count
         default:
             return listResult.count
         }
@@ -122,7 +125,7 @@ extension SearchViewController: UITableViewDataSource {
         switch indexPath.section {
         case 0:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "SearchTableViewCell", for: indexPath) as? SearchTableViewCell else { return SearchTableViewCell() }
-            cell.keySearchLabel.text = SearchManager.shared.listKeySearch[indexPath.row]
+            cell.keySearchLabel.text = UserDefaultManager.shared.getData()[indexPath.row]
             return cell
         default:
             guard let cell = tableView.dequeueReusableCell(withIdentifier: "PhotoTableViewCell", for: indexPath) as? PhotoTableViewCell else { return PhotoTableViewCell() }
